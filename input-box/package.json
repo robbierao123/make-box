@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "homepage": "https://robbierao123.github.io/make-box/",
+    
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -39,8 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^3.2.0"
   }
 }
