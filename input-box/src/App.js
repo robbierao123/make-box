@@ -1,6 +1,7 @@
 
 import React, { Component, Fragment } from 'react'
 import './App.css'
+import { SketchPicker } from 'react-color';
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -8,7 +9,8 @@ export default class App extends Component {
     this.state = {
       color:"red",
       size:"20",
-      makebox:false
+      error:false,
+      errorMsg:""
          
     }
 
@@ -17,25 +19,35 @@ export default class App extends Component {
     }
     this.handleChangeSize = this.handleChangeSize.bind(this);
     this.handleChangeColor = this.handleChangeColor.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+
   
 
   }
 
 
   handleChangeSize(event) {
-    this.setState({size: event.target.value});
+    const re = /^[0-9\b]+$/;
+
+ 
+    if(event.target.value > 300 || event.target.value < 20){
+      this.setState({error:true,errorMsg:"Please Enter a number in range 20-300"})
+    } else if ( !re.test(event.target.value)) {
+      this.setState({error:true,errorMsg:"Please Dont Enter letter, Enter a number in range 20-300"})
+   }
+    else{
+      this.setState({size: event.target.value, error:false, errorMsg:""});
+    }
+   
   }
+
   handleChangeColor(event) {
     this.setState({color: event.target.value});
   }
 
-  handleSubmit(event) {
-    alert(this.state.color);
-    this.setState({size: event.target.value});
 
-    event.preventDefault();
-  }
+  handleChangeComplete = (color) => {
+    this.setState({ color: color.hex });
+  };
 
 
   render() {
@@ -46,7 +58,7 @@ export default class App extends Component {
           Create a Box !
       </h1>
 
-      <form onSubmit={this.handleSubmit} >
+      <form >
     
     
           <div className="from-group">
@@ -58,23 +70,11 @@ export default class App extends Component {
           <div className="from-group">
           <label htmlFor="password">Color</label>
         
-        <select color={this.state.color} onChange={this.handleChangeColor}>
-          <option value="red">RED</option>
-           <option value="blue">BLUE</option>
-           <option value="yellow">YELLOW</option>
-           <option value="pink">PINK</option>
-           <option value="black">BLACK</option>
-           <option value="white">WHITE</option>
-           <option value="grey">GREY</option>
-           <option value="green">GREEN</option>
-      </select>
-    
+      <SketchPicker
+        color={ this.state.color }
+        onChangeComplete={ this.handleChangeComplete }
+      />
           </div>
-
-
-    
-    
-    
        
       </form>
       <br />
@@ -86,10 +86,12 @@ export default class App extends Component {
       <br />
       
     
-     
-      { <div style={{backgroundColor:this.state.color,height:this.state.size+"px", width:this.state.size+"px"}}> 
+     {this.state.error? <h1 style={{color:"red"}}>{this.state.errorMsg}</h1>:
+     <div style={{backgroundColor:this.state.color,height:this.state.size+"px", width:this.state.size+"px"}}> 
       im a box
-      </div> }
+      </div>  }
+     
+    
  
       
       </div>
